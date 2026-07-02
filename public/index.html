@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskFlow Lite - Premium Task Management</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/utilities.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <div class="logo-area">
+        <svg class="app-logo" viewBox="0 0 24 24" width="32" height="32" aria-hidden="true">
+          <rect x="2" y="2" width="20" height="20" rx="5" fill="var(--color-primary)" />
+          <path d="M9 12l2 2 4-4" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+        <h1>TaskFlow Lite</h1>
+      </div>
+      <div class="header-actions">
+        <button id="undo-btn" class="icon-btn" aria-label="Undo last action" title="Undo (Ctrl+Z)" disabled>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7v6h6M21 17a9 9 0 00-9-9 9 9 0 00-6 2.3L3 13"/></svg>
+        </button>
+        <button id="redo-btn" class="icon-btn" aria-label="Redo last action" title="Redo (Ctrl+Y)" disabled>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 7v6h-6M3 17a9 9 0 019-9 9 9 0 016 2.3l3 2.7"/></svg>
+        </button>
+        <button id="theme-toggle" class="icon-btn" aria-label="Toggle dark/light theme" title="Toggle Light/Dark Mode">
+          <svg class="sun-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <svg class="moon-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <form id="task-form" class="task-form" novalidate>
+        <div class="input-group">
+          <input type="text" id="task-input" placeholder="What needs to be done?" aria-label="New task input" maxlength="250" autocomplete="off">
+          <button type="submit" id="add-task-btn" aria-label="Add task" title="Add Task">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          </button>
+        </div>
+        <div id="error-msg" class="error-msg" style="display: none;" role="alert"></div>
+      </form>
+
+      <section class="task-controls">
+        <div id="task-counter" class="task-counter" aria-live="polite">0 tasks left</div>
+        <nav class="filter-bar" aria-label="Task filters">
+          <button id="filter-all" class="filter-btn active" data-filter="all" aria-label="Show all tasks">All</button>
+          <button id="filter-active" class="filter-btn" data-filter="active" aria-label="Show active tasks">Active</button>
+          <button id="filter-completed" class="filter-btn" data-filter="completed" aria-label="Show completed tasks">Completed</button>
+        </nav>
+        <button id="clear-completed" class="clear-completed-btn" aria-label="Clear all completed tasks" title="Clear Completed Tasks">Clear Completed</button>
+      </section>
+
+      <section class="task-list-section">
+        <ul id="task-list" class="task-list"></ul>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <p>Double-click a task to edit inline, or click the edit icon. Press Enter to save, Esc to cancel.</p>
+    </footer>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
