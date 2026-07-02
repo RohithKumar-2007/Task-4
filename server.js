@@ -24,9 +24,6 @@ const PORT = process.env.PORT || 5000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Connect to MongoDB BEFORE starting the server
-await connectDB();
-
 // ■■ Middleware Pipeline (ORDER MATTERS) ■■■■■■■■■■■■■■■■■■■■■■■
 app.use(helmet({
   contentSecurityPolicy: false // Allows dynamic Google Fonts and UI assets
@@ -68,21 +65,34 @@ app.use((req, res, next) => {
 // ■■ Global Error Handler (must be LAST) ■■■■■■■■■■■■■■■■■■■■■■
 app.use(errorHandler);
 
-// ■■ Change Streams (Bonus Feature - Real-Time Updates) ■■■■■■■■■
-try {
-  const changeStream = Task.watch();
-  changeStream.on('change', (data) => {
-    console.log(`[WATCH CHANGE] Detected operation: ${data.operationType} on task: ${data.documentKey._id}`);
-  });
-  
-  process.on('SIGINT', () => {
-    changeStream.close();
-  });
-} catch (err) {
-  console.warn('[WATCH WARNING] Change streams require replica sets (default on MongoDB Atlas M0). Standalone MongoDB will skip stream watching.', err.message);
-}
+// ■■ Server Startup Asynchronous Wrapper ■■■■■■■■■■■■■■■■■■■■■■■
+const startServer = async () => {
+  try {
+    // Connect to MongoDB BEFORE starting the server
+    await connectDB();
 
-app.listen(PORT, () => {
-  console.log(`TaskFlow API running on http://localhost:${PORT}`);
-  console.log(`API Docs available at http://localhost:${PORT}/api-docs`);
-});
+    // ■■ Change Streams (Bonus Feature - Real-Time Updates) ■■■■■■■■■
+    try {
+      const changeStream = Task.watch();
+      changeStream.on('change', (data) => {
+        console.log(`[WATCH CHANGE] Detected operation: ${data.operationType} on task: ${data.documentKey._id}`);
+      });
+      
+      process.on('SIGINT', () => {
+        changeStream.close();
+      });
+    } catch (err) {
+      console.warn('[WATCH WARNING] Change streams require replica sets (default on MongoDB Atlas M0). Standalone MongoDB will skip stream watching.', err.message);
+    }
+
+    app.listen(PORT, () => {
+      console.log(`TaskFlow API running on http://localhost:${PORT}`);
+      console.log(`API Docs available at http://localhost:${PORT}/api-docs`);
+    });
+  } catch (err) {
+    console.error('Failed to start server:', err);
+    process.exit(1);
+  }
+};
+
+startServer();
