@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const undoBtn = document.getElementById('undo-btn');
   const redoBtn = document.getElementById('redo-btn');
 
-  const API_URL = '/api/tasks';
+  const API_URL = 'https://taskflowlite1234.onrender.com/api/tasks';
 
   // Application State
   let tasks = [];
